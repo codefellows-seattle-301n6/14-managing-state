@@ -1,25 +1,27 @@
 (function(module) {
-  var articlesController = {};
+  var articleController = {};
 
   Article.createTable();
 
-  articlesController.index = function(ctx, next) {
-    articleView.index(ctx.articles);
+  articleController.index = function(ctx, next) {
+    if(ctx.articles.length) {
+      articleView.index(ctx.articles);
+    } else{
+      $('#about').text('Sorry ... no matching articles ...');
+    }
   };
 
   // COMMENT: What does this method do?  What is it's execution path?
-  // This method loads by the id
-  articlesController.loadById = function(ctx, next) {
+  articleController.loadById = function(ctx, next) {
     var articleData = function(article) {
       ctx.articles = article;
       next();
     };
-
     Article.findWhere('id', ctx.params.id, articleData);
   };
 
   // COMMENT: What does this method do?  What is it's execution path?
-  articlesController.loadByAuthor = function(ctx, next) {
+  articleController.loadByAuthor = function(ctx, next) {
     var authorData = function(articlesByAuthor) {
       ctx.articles = articlesByAuthor;
       next();
@@ -31,7 +33,7 @@
   };
 
   // COMMENT: What does this method do?  What is it's execution path?
-  articlesController.loadByCategory = function(ctx, next) {
+  articleController.loadByCategory = function(ctx, next) {
     var categoryData = function(articlesInCategory) {
       ctx.articles = articlesInCategory;
       next();
@@ -41,19 +43,19 @@
   };
 
   // COMMENT: What does this method do?  What is it's execution path?
-  articlesController.loadAll = function(ctx, next) {
+  articleController.loadAll = function(ctx, next) {
     var articleData = function(allArticles) {
-      ctx.articles = Article.all;
+      ctx.articles = Article.allArticles;
       next();
     };
 
-    if (Article.all.length) {
-      ctx.articles = Article.all;
+    if (Article.allArticles.length) {
+      ctx.articles = Article.allArticles;
       next();
     } else {
       Article.fetchAll(articleData);
     }
   };
 
-  module.articlesController = articlesController;
+  module.articleController = articleController;
 })(window);

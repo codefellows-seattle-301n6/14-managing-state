@@ -2,10 +2,10 @@
   function Article (opts) {
     Object.keys(opts).forEach(function(e, index, keys) {
       this[e] = opts[e];
-    },this);
+    }, this);
   }
 
-  Article.all = [];
+  Article.allArticles = [];
 
   Article.createTable = function(callback) {
     webDB.execute(
@@ -32,8 +32,16 @@
     webDB.execute(
       [
         {
-          'sql': 'INSERT INTO articles (title, author, authorUrl, category, publishedOn, body) VALUES (?, ?, ?, ?, ?, ?);',
-          'data': [this.title, this.author, this.authorUrl, this.category, this.publishedOn, this.body],
+          'sql': 'INSERT INTO articles ' +
+          '(title, author, authorUrl, category, publishedOn, body) ' +
+          'VALUES (?, ?, ?, ?, ?, ?);',
+          'data':
+            [this.title,
+             this.author,
+             this.authorUrl,
+             this.category,
+             this.publishedOn,
+             this.body],
         }
       ],
       callback
@@ -56,8 +64,22 @@
     webDB.execute(
       [
         {
-          'sql': 'UPDATE articles SET title = ?, author = ?, authorUrl = ?, category = ?, publishedOn = ?, body = ? WHERE id = ?;',
-          'data': [this.title, this.author, this.authorUrl, this.category, this.publishedOn, this.body, this.id]
+          'sql': 'UPDATE articles SET '+
+          'title = ?, ' +
+          'author = ?, ' +
+          'authorUrl = ?, ' +
+          'category = ?, ' +
+          'publishedOn = ?, ' +
+          'body = ? ' +
+          'WHERE id = ?;',
+          'data':
+            [this.title,
+             this.author,
+             this.authorUrl,
+             this.category,
+             this.publishedOn,
+             this.body,
+             this.id]
         }
       ],
       callback
@@ -65,30 +87,33 @@
   };
 
   Article.loadAll = function(rows) {
-    Article.all = rows.map(function(ele) {
+    Article.allArticles = rows.map(function(ele) {
       return new Article(ele);
     });
   };
 
   Article.fetchAll = function(callback) {
-    webDB.execute('SELECT * FROM articles ORDER BY publishedOn DESC', function(rows) {
-      if (rows.length) {
-        Article.loadAll(rows);
-        callback();
-      } else {
-        $.getJSON('/data/hackerIpsum.json', function(rawData) {
-          // Cache the json, so we don't need to request it next time:
-          rawData.forEach(function(item) {
-            var article = new Article(item); // Instantiate an article based on item from JSON
-            article.insertRecord(); // Cache the article in DB
-          });
-          webDB.execute('SELECT * FROM articles', function(rows) {
+    webDB.execute(
+      'SELECT * FROM articles ORDER BY publishedOn DESC',
+        function(rows) {
+          if (rows.length) {
             Article.loadAll(rows);
             callback();
-          });
+          } else {
+            $.getJSON('/data/hackerIpsum.json', function(rawData) {
+              rawData.forEach(function(item) {
+                var article = new Article(item);
+                article.insertRecord();
+              });
+              webDB.execute(
+                'SELECT * FROM articles ORDER BY publishedOn DESC',
+                function(rows) {
+                  Article.loadAll(rows);
+                  callback();
+                });
+            });
+          }
         });
-      }
-    });
   };
 
   Article.findWhere = function(field, value, callback) {
@@ -105,7 +130,7 @@
 
   // DONE: Example of synchronous, FP approach to getting unique data
   Article.allAuthors = function() {
-    return Article.all.map(function(article) {
+    return Article.allArticles.map(function(article) {
       return article.author;
     })
     .reduce(function(names, name) {
@@ -122,7 +147,7 @@
   };
 
   Article.numWordsAll = function() {
-    return Article.all.map(function(article) {
+    return Article.allArticles.map(function(article) {
       return article.body.match(/\w+/g).length;
     })
     .reduce(function(a, b) {
@@ -134,7 +159,7 @@
     return Article.allAuthors().map(function(author) {
       return {
         name: author,
-        numWords: Article.all.filter(function(a) {
+        numWords: Article.allArticles.filter(function(a) {
           return a.author === author;
         })
         .map(function(a) {
@@ -145,14 +170,6 @@
         })
       };
     });
-  };
-
-  Article.stats = function() {
-    return {
-      numArticles: Article.all.length,
-      numWords: Article.numwords(),
-      Authors: Article.allAuthors(),
-    };
   };
 
   module.Article = Article;

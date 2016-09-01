@@ -2,7 +2,7 @@
   var aboutController = {};
 
   aboutController.index = function() {
-    repos.requestRepos(repoView.index);
+    reposObj.requestRepos(repoView.index);
   };
 
   module.aboutController = aboutController;

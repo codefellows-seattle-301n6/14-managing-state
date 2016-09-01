@@ -1,23 +1,23 @@
 (function(module) {
-  var repos = {};
+  var reposObj = {};
 
-  repos.all = [];
+  reposObj.all = [];
 
-  repos.requestRepos = function(callback) {
-    $.get('/github/users/codefellows-301d4/repos' +
+  reposObj.requestRepos = function(callback) {
+    $.get('/github/users/codefellows-seattle-301d9/repos' +
           '?per_page=5' +
           '&sort=updated')
     .done(function(data, message, xhr) {
-      repos.all = data;
+      reposObj.all = data;
     })
     .done(callback);
   };
 
-  repos.with = function(attr) {
-    return repos.all.filter(function(repo) {
+  reposObj.with = function(attr) {
+    return reposObj.all.filter(function(repo) {
       return repo[attr];
     });
   };
 
-  module.repos = repos;
+  module.reposObj = reposObj;
 })(window);

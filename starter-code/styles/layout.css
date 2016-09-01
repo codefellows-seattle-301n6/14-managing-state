@@ -21,6 +21,10 @@
   margin: .2em 5%;
 }
 
+#blog-stats {
+  display: none;
+}
+
 @media only screen and (min-width: 640px) {
   .heading-group-h1 {
     padding: .1em .1em .1em 2em;

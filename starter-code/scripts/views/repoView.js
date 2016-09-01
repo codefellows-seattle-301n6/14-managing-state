@@ -2,7 +2,7 @@
   var repoView = {};
 
   var ui = function() {
-    var $about = $('#about'); // Best practice: Cache the DOM query if it's used more than once.
+    var $about = $('#about');
 
     $about.find('ul').empty();
     $about.show().siblings().hide();
@@ -17,7 +17,7 @@
     ui();
 
     $('#about ul').append(
-      repos.with('forks_count').map(render)
+      reposObj.with('forks_count').map(render)
     );
   };
 
