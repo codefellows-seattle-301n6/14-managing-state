@@ -141,7 +141,6 @@
     }, []);
   };
 
-  // DONE: Example of async, SQL-based approach to getting unique data
   Article.allCategories = function(callback) {
     webDB.execute('SELECT DISTINCT category FROM articles;', callback);
   };

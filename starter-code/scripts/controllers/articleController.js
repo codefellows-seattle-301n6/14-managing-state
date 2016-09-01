@@ -7,7 +7,7 @@
     if(ctx.articles.length) {
       articleView.index(ctx.articles);
     } else{
-      $('#about').text('Sorry ... no matching articles ...');
+      page('/');
     }
   };
 

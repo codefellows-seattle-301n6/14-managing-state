@@ -17,21 +17,14 @@
 
   // COMMENT: What does this method do?  What is it's execution path?
   articleView.populateFilters = function() {
-    var options,
-      template = Handlebars.compile($('#option-template').text());
-
-    /* Example of using model method with functional programming,
-       synchronous approach:
-       This method is dependant on info being in the DOM.
-       Only authors of shown articles are loaded. */
+    var options;
+    var template = Handlebars.compile($('#option-template').text());
     options = Article.allAuthors()
       .map(function(author) {
         return template({val: author});
       });
     $('#author-filter').append(options);
 
-    // Example of using model method with async, SQL-based approach:
-    // This approach is DOM-independent, since it reads from the DB directly.
     Article.allCategories(function(rows) {
       $('#category-filter').append(
         rows.map(function(row) {
@@ -90,43 +83,6 @@
      });
    }; */
 
-  articleView.initNewArticlePage = function() {
-    $('#articles').show().siblings().hide();
-
-    $('#export-field').hide();
-    $('#article-json').on('focus', function(){
-      this.select();
-    });
-
-    $('#new-form').on('change', 'input, textarea', articleView.create);
-  };
-
-  articleView.create = function() {
-    var formArticle;
-    $('#articles').empty();
-
-    // Instantiate an article based on what's in the form fields:
-    formArticle = new Article({
-      title: $('#article-title').val(),
-      author: $('#article-author').val(),
-      authorUrl: $('#article-author-url').val(),
-      category: $('#article-category').val(),
-      body: $('#article-body').val(),
-      publishedOn: $('#article-published:checked').length ? new Date() : null
-    });
-
-    $('#articles').append(render(formArticle));
-
-    $('pre code').each(function(i, block) {
-      hljs.highlightBlock(block);
-    });
-
-    // Export the new article as JSON,
-    //  so it's ready to copy/paste into blogArticles.js:
-    $('#export-field').show();
-    $('#article-json').val(JSON.stringify(article) + ',');
-  };
-
   // COMMENT: What does this method do?  What is it's execution path?
   articleView.index = function(articles) {
     $('#articles').show().siblings().hide();
@@ -143,17 +99,6 @@
     if ($('#articles article').length > 1) {
       $('.article-body *:nth-of-type(n+2)').hide();
     }
-  };
-
-  articleView.initAdminPage = function() {
-    var template = Handlebars.compile($('#author-template').text());
-
-    Article.numWordsByAuthor().forEach(function(stat) {
-      $('.author-stats').append(template(stat));
-    });
-
-    $('#blog-stats .articles').text(Article.allArticles.length);
-    $('#blog-stats .words').text(Article.numWordsAll());
   };
 
   module.articleView = articleView;
