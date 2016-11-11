@@ -1,6 +1,4 @@
 ![CF](https://i.imgur.com/7v5ASc8.png)  Lab 14: Managing State
-=======
-[![Build Status](https://travis-ci.org/codefellows-seattle-301d9/14-managing-state.svg?branch=master)](https://travis-ci.org/codefellows-seattle-301d9/14-managing-state) [![GitHub issues](https://img.shields.io/badge/Issues%3F-Ask%20for%20Help!-orange.svg)](https://github.com/codefellows/seattle-301d9/issues/new)
 
 Let's circle back to our UI logic... You know, everything that sets up the page for interaction. Now we can use our new tools of routing, middleware, MVC separation, SQL, and resource rendering.
 
