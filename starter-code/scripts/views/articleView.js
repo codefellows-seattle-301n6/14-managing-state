@@ -25,10 +25,10 @@
       .map(function(author) {
         return template({val: author});
       });
-    $('#author-filter').append(options);
+    $('#author-filter').empty().append(options);
 
     Article.allCategories(function(rows) {
-      $('#category-filter').append(
+      $('#category-filter').empty().append(
         rows.map(function(row) {
           return template({val: row.category});
         })
