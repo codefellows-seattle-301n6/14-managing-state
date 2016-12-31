@@ -18,6 +18,9 @@
   };
 
   // COMMENT: What does this method do?  What is it's execution path?
+  //Populates author and category filters by appending options to their respective
+  //filters after mapping over the array of article templates and returning a new array
+  //of author names and a new array of article categories.
   articleView.populateFilters = function() {
     var options;
     var template = Handlebars.compile($('#option-template').text());
@@ -37,6 +40,12 @@
   };
 
   // COMMENT: What does this method do?  What is it's execution path?
+  //This method ensures that multiple selections cannot be made before the selected
+  //information can be apended, and ensures that only one append can happen at a time.
+  //It takes the selected variable and uses the this property of the event listener
+  //grabs the id and removes the '-filter' and replaces it with that selected value.
+  //Whichever option (category or author) that was not selected is then emptied out so
+  //that it can be repopulated.
   articleView.handleFilters = function() {
     $('#filters').one('change', 'select', function() {
       var resource = this.id.replace('-filter', '');
@@ -86,6 +95,11 @@
    }; */
 
   // COMMENT: What does this method do?  What is it's execution path?
+  //this method instantiates everything! It goes over the allArticles object
+  //array populates all the information on the main home page, from there it hides
+  //the content of the articles if they are greater then a certain length. While this
+  //is happening it also calls populateFilters and handleFilters which ensures no
+  //duplicates are displayed and populates the navigation options.
   articleView.index = function(articles) {
     $('#articles').show().siblings().hide();
 
