@@ -14,6 +14,7 @@
   };
 
   // COMMENT: What does this method do?  What is it's execution path?
+  //This method handles the functionality when a user clicks on the 'read on' link of the home page. Once clicked, the function loops through the article array and matches the id that was selected. Finally, the articleController path goes on to call a the second function that renders the full article to the screen.
   articleController.loadById = function(ctx, next) {
     var articleData = function(article) {
       ctx.articles = article;
@@ -23,6 +24,7 @@
   };
 
   // COMMENT: What does this method do?  What is it's execution path?
+  // First, this method matches what is selected in the author filter dropdown to all articles by author. Then it uses the articleController path to find the articles and render them to the page.
   articleController.loadByAuthor = function(ctx, next) {
     var authorData = function(articlesByAuthor) {
       ctx.articles = articlesByAuthor;
@@ -35,6 +37,7 @@
   };
 
   // COMMENT: What does this method do?  What is it's execution path?
+  // This has the same functionality as the author filter, but handles when the category filter dropdown is selected. The selection is filtered by all articles by category and then the articleController is used to render the selected articles to the page.
   articleController.loadByCategory = function(ctx, next) {
     var categoryData = function(articlesInCategory) {
       ctx.articles = articlesInCategory;
@@ -45,6 +48,7 @@
   };
 
   // COMMENT: What does this method do?  What is it's execution path?
+  // This method uses the articleView path, which takes all our article instances and renders them all to the page.
   articleController.loadAll = function(ctx, next) {
     var articleData = function(allArticles) {
       ctx.articles = Article.allArticles;
